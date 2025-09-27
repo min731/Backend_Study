@@ -1,0 +1,19 @@
+meta {
+  name: get_sortedset
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:8000/sorted-set/{{key}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  key: LLM3
+}
+
+settings {
+  encodeUrl: true
+}

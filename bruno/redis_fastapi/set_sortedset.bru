@@ -1,0 +1,26 @@
+meta {
+  name: set_sortedset
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8000/sorted-set/{{key}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "value": "GPT3.5",
+    "score": 99
+  }
+}
+
+vars:pre-request {
+  key: LLM3
+}
+
+settings {
+  encodeUrl: true
+}

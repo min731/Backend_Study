@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # 1. Redis 서비스 정의
+  redis:
+    image: redis:latest          # 공식 Redis 이미지 사용
+    container_name: my_redis     # 컨테이너 이름 지정
+    ports:
+      - "6379:6379"              # 호스트와 컨테이너 포트 연결  
+    volumes:
+      - redis_data:/data         # 데이터를 영속적으로 저장하기 위한 볼륨
+
+  # 2. FastAPI API 서비스 정의
+  api:
+    container_name: my_fastapi_app
+    build: .                     # 현재 디렉토리의 Dockerfile을 사용하여 이미지 빌드
+    ports:
+      - "8000:8000"              # 호스트와 컨테이너 포트 연결
+    volumes:
+      - ./app:/code/app          # 소스 코드 변경 시 자동 리로드를 위해 볼륨 마운트
+    environment:
+      - REDIS_HOST=redis         # FastAPI 코드에서 사용할 환경 변수 (Redis 호스트명)
+    depends_on:
+      - redis                    # Redis 컨테이너가 먼저 실행되도록 의존성 설정
+
+# Docker가 관리하는 볼륨 정의
+volumes:
+  redis_data:

@@ -1,0 +1,54 @@
+# config/logging_config.yaml
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  # 일반 텍스트 포맷터
+  default:
+    format: "%(asctime)s - %(levelname)s - %(name)s - [%(request_id)s] - %(message)s" # 👈 request_id 추가
+    datefmt: "%Y-%m-%d %H:%M:%S"
+  # JSON 구조화 포맷터
+  json:
+    class: "pythonjsonlogger.jsonlogger.JsonFormatter"
+    format: "%(asctime)s %(levelname)s %(name)s %(message)s %(request_id)s" # 👈 request_id 추가
+
+handlers:
+  console:
+    class: "logging.StreamHandler"
+    level: "DEBUG"
+    formatter: "default"
+  
+  app_file:
+    class: "logging.handlers.RotatingFileHandler"
+    level: "INFO"
+    formatter: "default"
+    filename: "logs/app.log"
+    maxBytes: 10485760 # 10MB
+    backupCount: 3
+    encoding: "utf-8"
+
+  json_file:
+    class: "logging.handlers.RotatingFileHandler"
+    level: "INFO"
+    formatter: "json"
+    filename: "logs/app.json.log" # 👈 JSON 로그 파일
+    maxBytes: 10485760 # 10MB
+    backupCount: 3
+    encoding: "utf-8"
+
+loggers:
+  # 내 애플리케이션 로거들의 최상위 로거
+  "my_app":
+    handlers: ["console", "app_file", "json_file"]
+    level: "DEBUG"
+    propagate: false # 루트로 전파 X
+
+  # 라이브러리 로거
+  "uvicorn":
+    handlers: ["console"]
+    level: "INFO"
+    propagate: false
+
+root:
+  handlers: ["console"]
+  level: "WARNING"

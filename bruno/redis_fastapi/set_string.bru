@@ -1,0 +1,25 @@
+meta {
+  name: set_string
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8000/string/{{key}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "value": "key3_value3"
+  }
+}
+
+vars:pre-request {
+  key: key3
+}
+
+settings {
+  encodeUrl: true
+}

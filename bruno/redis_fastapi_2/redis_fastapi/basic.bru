@@ -1,0 +1,15 @@
+meta {
+  name: basic
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{local_var}}:8000/
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
